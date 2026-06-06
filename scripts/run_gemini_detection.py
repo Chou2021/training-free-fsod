@@ -364,7 +364,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--api-base", default=os.getenv("GEMINI_API_BASE", "https://generativelanguage.googleapis.com"))
     parser.add_argument("--api-url", default=os.getenv("GEMINI_API_URL", ""))
     parser.add_argument("--api-key", default=os.getenv("GEMINI_API_KEY", ""))
-    parser.add_argument("--model", default=os.getenv("GEMINI_MODEL", "gemini-2.5-flash"))
+    parser.add_argument("--model", default=os.getenv("GEMINI_MODEL", "gemini-3.5-flash"))
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--max-output-tokens", type=int, default=8192)
     parser.add_argument("--timeout", type=int, default=180)

@@ -23,7 +23,7 @@ Optional endpoint/model overrides:
 
 ```bash
 export GEMINI_API_BASE="https://generativelanguage.googleapis.com"
-export GEMINI_IMAGE_MODEL="gemini-2.5-flash-image"
+export GEMINI_IMAGE_MODEL="gemini-3.1-flash-image-preview"
 ```
 
 If your API provider exposes a Gemini-compatible image model under another name, pass `--model` explicitly.

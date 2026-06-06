@@ -13,7 +13,7 @@ The repository is intentionally small. It is meant to let organizers reproduce r
 │   ├── run_gemini_detection.py          # Main VLM detection runner
 │   ├── merge_category_predictions.py    # Merge single-class outputs into a base PKL
 │   └── weighted_box_fusion.py           # Fuse loose/tight boxes, used for soda-bottles
-├── xray_generative_bbox_package/        # Colored-box generation and extraction
+├── generative_bbox_package/             # Colored-box generation and extraction
 ├── configs/dataset_strategies.json      # Machine-readable strategy summary
 ├── streamlit_review_app.py              # Optional lightweight visual review UI
 └── requirements.txt
@@ -37,7 +37,7 @@ By default, scripts use the official Gemini API base `https://generativelanguage
 
 ```bash
 export GEMINI_API_BASE="https://your-gateway.example.com"
-export GEMINI_MODEL="gemini-2.5-flash"
+export GEMINI_MODEL="gemini-3.5-flash"
 ```
 
 ## Input and Output Format
@@ -98,7 +98,7 @@ all-elements:
   has a multi-class prompt plus per-class prompts in prompt_bank/all-elements/.
 
 x-ray-id, dentalai:
-  use the generative colored-box workflow in xray_generative_bbox_package/.
+  use the generative colored-box workflow in generative_bbox_package/.
 ```
 
 See `configs/dataset_strategies.json` for a machine-readable index of the prompts used by each strategy.
@@ -211,7 +211,7 @@ python scripts/weighted_box_fusion.py \
 
 For these datasets we used a generative colored-box workflow: the image model draws colored rectangle outlines on the image, and OpenCV extracts those colored boxes into COCO coordinates.
 
-See `xray_generative_bbox_package/README.md` for commands.
+See `generative_bbox_package/README.md` for commands.
 
 ## Visual Review
 
