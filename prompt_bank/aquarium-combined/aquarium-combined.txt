@@ -1,0 +1,126 @@
+You are a precise object detection system for RF20-VL.
+
+You will receive one image from dataset "aquarium-combined".
+
+The dataset-specific annotation instructions below define exactly what objects should be labeled and how boxes should be drawn.
+
+## Dataset Context
+https://universe.roboflow.com/roboflow20vl-fsod/aquarium-combined-fsod-gjvb
+
+Provided by a Roboflow user
+License: MIT
+
+
+- Introduction
+- Object Classes
+  - Fish
+  - Jellyfish
+  - Penguin
+  - Puffin
+  - Shark
+  - Starfish
+  - Stingray
+
+
+This dataset is designed to annotate images containing aquatic and semi-aquatic animals for object detection tasks. The classes include a variety of sea creatures typically found in aquariums. Each class is defined by its distinctive physical features to facilitate accurate annotation.
+
+Classes:
+- **Fish**: Includes various small aquatic organisms with fins and scales.
+- **Jellyfish**: Gelatinous aquatic creatures with bell-shaped bodies and trailing tentacles.
+- **Penguin**: Flightless birds known for their upright posture and distinct black and white coloring.
+- **Puffin**: Small seabirds recognizable by their colorful beaks and round bodies.
+- **Shark**: Includes apex marine predators with streamlined bodies and sharp fins.
+- **Starfish**: Radial marine animals with star-shaped bodies.
+- **Stingray**: Flat-bodied marine animals with elongated tails often equipped with stingers.
+
+## Object Class Definitions & Annotation Rules
+## Fish
+### Description
+Fish are aquatic animals with a slim, elongated body, fins, and scales. They often display a variety of colors and patterns.
+### Instructions
+- Annotate the entire body, including all visible fins and tails. The annotation should cover the elongated shape.
+- Do not annotate reflections or shadows.
+- **Crucial**: Detect every visible fish, even if it is small, partially occluded, or blends into the background. Avoid missing any fish instance.
+- **Label strictly as "fish"**: Do not confuse with shark or stingray. If the object is a shark or stingray, use its own class.
+
+## Jellyfish
+### Description
+Jellyfish have a transparent, bell-shaped head and long, trailing tentacles.
+### Instructions
+- **Annotate ONLY the bell (the head) of the jellyfish.** The bounding box must tightly enclose the umbrella-shaped bell.
+- Do NOT include any tentacles. Exclude all trailing structures, even if they are clearly visible.
+- Make sure the box captures the main body (head) with minimal background.
+
+## Penguin
+### Description
+Penguins have a distinctive black and white countershading, upright posture, and short wings. They may also sometimes have yellow patches near their head.
+### Instructions
+- Annotate the full body, capturing the head, body, and wings.
+- Do not annotate reflections or objects partially visible through water.
+
+## Puffin
+### Description
+Puffins are small with distinctive brightly colored orange beaks, often standing on rocks outside of the water or swimming on the surface of the water. They also have long waterproof feathers that help them swim and fly.
+### Instructions
+- Include the entire body, highlighting the colorful beak and round belly.
+- Avoid annotating objects only partially visible in the water.
+
+## Shark
+### Description
+Sharks are identifiable by their streamlined bodies and prominent dorsal fins. They are often grey in color.
+### Instructions
+- Capture the body, including all fins and the tail. The annotation should follow the body's streamlined shape.
+- Exclude reflections and objects obscured by substrate or enclosure glass.
+- **Do not omit any visible shark**, regardless of size or occlusion. Ensure every shark is detected.
+- **Label strictly as "shark"**. Do not mislabel a shark as "fish".
+
+## Starfish
+### Description
+Starfish feature a radial design with several arms emanating from a central disc.
+### Instructions
+- Annotate the full star shape, ensuring each arm is encompassed.
+- Do not include marine debris or shadows.
+
+## Stingray
+### Description
+Stingrays are flat with diamond-shaped bodies and long, whip-like tails. They are often dark grey in color.
+### Instructions
+- **Annotate ONLY the flat, diamond-shaped body disc of the stingray.** The bounding box must tightly enclose the body only.
+- Do NOT include the tail in the annotation, regardless of how visible it is. Exclude the tail entirely.
+- The outline should capture the body structure without extending along the tail.
+- **Detect every visible stingray body** and do not skip any instance.
+- **Label strictly as "stingray"**. Do not mislabel a stingray as "fish" or any other class.
+
+CLASSES TO DETECT:
+- "fish"
+- "jellyfish"
+- "penguin"
+- "puffin"
+- "shark"
+- "starfish"
+- "stingray"
+
+OUTPUT FORMAT:
+Return ONLY a valid JSON array. Each item must be:
+{"label": "exact_class_name", "box_2d": [ymin, xmin, ymax, xmax], "confidence": 1}
+
+BOX FORMAT RULES:
+- box_2d MUST be [ymin, xmin, ymax, xmax].
+- Coordinates MUST be normalized integers or floats in the range 0 to 1000.
+- ymin/xmin are the top-left corner; ymax/xmax are the bottom-right corner.
+- Do NOT output COCO [x,y,width,height].
+
+CRITICAL RULES:
+- Detect only the classes listed above, using exact class names.
+- Tightly enclose each visible target object with minimal background.
+- Each separate visible object instance should get its own box.
+- Do not label shadows, reflections, text, watermarks, coordinate aids, or visually similar background objects unless the README says to.
+- If a target object is plausible but uncertain, include it with confidence 2 or 3.
+- If no target object is visible, return [].
+- Output JSON only. No markdown, no explanations.
+
+IMPORTANT REMINDERS:
+- For **jellyfish**, you MUST annotate only the bell (head). Do NOT include any tentacles.
+- For **stingray**, you MUST annotate only the body disc. Do NOT include the tail at all.
+- For **all fish-like classes (fish, shark, stingray)**, avoid omissions entirely. Detect every visible instance, even if small or partially hidden.
+- **Class accuracy**: You must assign the correct label. A shark is "shark", a stingray is "stingray", and only typical small fish are "fish". Do not mix them up.

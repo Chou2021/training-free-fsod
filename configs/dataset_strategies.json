@@ -1,0 +1,76 @@
+{
+  "single_pass_multi_class": [
+    "aerial-airport",
+    "aquarium-combined",
+    "defect-detection",
+    "flir-camera-objects",
+    "gwhd2021",
+    "new-defects-in-wood",
+    "orionproducts",
+    "paper-parts",
+    "the-dreidel-project",
+    "trail-camera",
+    "water-meter",
+    "wb-prova",
+    "wildfire-smoke"
+  ],
+  "combined_multi_and_single_class": {
+    "actions": {
+      "base_prompt": "prompt_bank/actions/actions.txt",
+      "single_class_prompts": [
+        "prompt_bank/actions/actions_ball.txt",
+        "prompt_bank/actions/actions_attack.txt",
+        "prompt_bank/actions/actions_block.txt",
+        "prompt_bank/actions/actions_defense.txt",
+        "prompt_bank/actions/actions_serve.txt",
+        "prompt_bank/actions/actions_set.txt"
+      ]
+    },
+    "lacrosse-object-detection": {
+      "base_prompt": "prompt_bank/lacrosse-object-detection/lacrosse-object-detection.txt",
+      "single_class_prompts": [
+        "prompt_bank/lacrosse-object-detection/lacrosse-object-detection-longpole.txt"
+      ]
+    },
+    "recode-waste": {
+      "base_prompt": "prompt_bank/recode-waste/recode-waste.txt",
+      "single_class_prompts": [
+        "prompt_bank/recode-waste/recode-waste-aggregate.txt",
+        "prompt_bank/recode-waste/recode-waste-metal.txt"
+      ]
+    }
+  },
+  "single_class_prompt_bank": {
+    "all-elements": [
+      "prompt_bank/all-elements/all-elements_button.txt",
+      "prompt_bank/all-elements/all-elements_check_box.txt",
+      "prompt_bank/all-elements/all-elements_checked_box.txt",
+      "prompt_bank/all-elements/all-elements_checked_radio_button.txt",
+      "prompt_bank/all-elements/all-elements_dropdown_box.txt",
+      "prompt_bank/all-elements/all-elements_dropdown_expand.txt",
+      "prompt_bank/all-elements/all-elements_icon.txt",
+      "prompt_bank/all-elements/all-elements_radio_button.txt",
+      "prompt_bank/all-elements/all-elements_scroll_bar.txt",
+      "prompt_bank/all-elements/all-elements_text_box.txt"
+    ]
+  },
+  "weighted_box_fusion": {
+    "soda-bottles": {
+      "first_prompt": "prompt_bank/soda-bottles/soda-bottles-loose.txt",
+      "second_prompt": "prompt_bank/soda-bottles/soda-bottles-tight.txt",
+      "script": "scripts/weighted_box_fusion.py"
+    }
+  },
+  "generative_colored_box_extraction": {
+    "x-ray-id": {
+      "package": "xray_generative_bbox_package",
+      "prompt": "xray_generative_bbox_package/prompts/xray_overlay_prompt.txt",
+      "preset": "all6"
+    },
+    "dentalai": {
+      "package": "xray_generative_bbox_package",
+      "prompt": "xray_generative_bbox_package/prompts/dental_overlay_prompt.txt",
+      "preset": "dentalai"
+    }
+  }
+}

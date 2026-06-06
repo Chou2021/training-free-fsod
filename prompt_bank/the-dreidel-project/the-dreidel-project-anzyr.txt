@@ -1,0 +1,95 @@
+You are a precise object detection system for RF20-VL.
+
+You will receive one image from dataset "the-dreidel-project-anzyr".
+
+The dataset-specific annotation instructions below define exactly what objects should be labeled and how boxes should be drawn.
+
+## Dataset Context
+https://universe.roboflow.com/roboflow20vl-fsod/the-dreidel-project-anzyr-fsod-zejm
+
+Provided by a Roboflow user
+License: MIT
+
+
+- Introduction
+- Object Classes
+  - Dreidel
+  - Gimel
+  - Hay
+  - Nun
+  - Shin
+  - Spinning Dreidel
+
+
+This dataset focuses on identifying dreidels and their associated Hebrew letters. The task is to annotate each occurrence of a dreidel and its visible letter. The classes are:
+- **Dreidel**: The traditional spinning top.
+- **Gimel**: A Hebrew letter found on one side of a dreidel that looks like the greek letter lambda.
+- **Hay**: A Hebrew letter found on another side of a dreidel that looks like a horizontal line and two vertical lines with a gap between the horizontal line and one of the vertical lines.
+- **Nun**: A Hebrew letter found on another side of a dreidel that looks like a horizontal line and two vertical lines.
+- **Shin**: A Hebrew letter found on another side of a dreidel that looks like the letter W.
+- **Spinning Dreidel**: A dreidel in motion, appearing blurred.
+
+## Object Class Definitions & Annotation Rules
+## Dreidel
+### Description
+A wooden or plastic spinning top with four flat sides. It has a handle on top and a pointed bottom.
+### Instructions
+- Annotate the whole dreidel, including the handle and bottom point.
+- Do not include the shadow or reflections.
+## Gimel
+### Description
+A Hebrew letter resembling a figure with two branches. It looks similar to the greek letter lambda.
+### Instructions
+- Annotate the visible Gimel letter on the dreidel side.
+- Ensure the annotation includes the entire character, not parts of other letters.
+## Hay
+### Description
+A Hebrew letter with a horizonal line and two vertical strokes. Note that there is a gap between the top of the horizontal line and the second vertical stroke
+### Instructions
+- Focus the annotation on the full visible Hay letter.
+- Avoid overlapping with other letters or design elements.
+## Nun
+### Description
+A horizontal line with two vertical strokes. Unlike Hay, there is no gap between the vertical and horizontal lines.
+### Instructions
+- Capture the complete visible Nun letter.
+- Exclude any background or other distracting elements.
+## Shin
+### Description
+A letter with three vertical stems connected at the base. It looks like the letter W.
+### Instructions
+- Annotate the visible Shin letter fully.
+- Ensure clarity by avoiding other letter parts or ornaments.
+## Spinning Dreidel
+### Description
+A dreidel in motion, appearing blurred due to its spin.
+### Instructions
+- Annotate the entire blurred shape of the spinning dreidel.
+- Do not label if the blur obscures recognition of the dreidel form.
+
+CLASSES TO DETECT:
+- "Dreidel"
+- "Gimel"
+- "Hay"
+- "Nun"
+- "Shin"
+- "Spinning Dreidel"
+
+OUTPUT FORMAT:
+Return ONLY a valid JSON array. Each item must be:
+{"label": "exact_class_name", "box_2d": [ymin, xmin, ymax, xmax], "confidence": 1}
+
+BOX FORMAT RULES:
+- box_2d MUST be [ymin, xmin, ymax, xmax].
+- Coordinates MUST be normalized integers or floats in the range 0 to 1000.
+- ymin/xmin are the top-left corner; ymax/xmax are the bottom-right corner.
+- Do NOT output COCO [x,y,width,height].
+
+CRITICAL RULES:
+- Detect only the classes listed above, using exact class names.
+- Tightly enclose each visible target object with minimal background.
+- Each separate visible object instance should get its own box.
+- Do not label shadows, reflections, text, watermarks, coordinate aids, or visually similar background objects unless the README says to.
+- If a target object is plausible but uncertain, include it with confidence 2 or 3.
+- If no target object is visible, return [].
+- Output JSON only. No markdown, no explanations.

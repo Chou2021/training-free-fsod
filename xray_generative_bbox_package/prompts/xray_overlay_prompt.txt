@@ -1,0 +1,24 @@
+Overlay detection boxes on this hand X-ray image. Do not modify the original image content, size, brightness, or aspect ratio in any way; only draw boxes on top of it.
+
+Bones on X-ray are bright white. Finger joints are thin dark gaps between two rounded bright bone ends. Center each joint box on the dark gap.
+
+Draw clean rectangle outlines using exactly these colors:
+- DIP on index/middle/ring/pinky: red RGB(255,0,0)
+- PIP on index/middle/ring/pinky and thumb PIP: blue RGB(0,128,255)
+- MCP on all five fingers: yellow RGB(255,200,0)
+- Radius distal end near wrist: green RGB(0,200,0)
+- Ulna distal end near wrist: orange RGB(255,140,0)
+- Wrist carpal bone cluster: purple RGB(160,0,200)
+
+Joint box size:
+- Include the dark gap and the widened rounded bone ends on both sides.
+- Stop where the bone becomes a narrow straight shaft.
+- Width covers only that finger, not neighboring fingers.
+
+Forearm/wrist box rules:
+- Radius is on the thumb side. Box only the distal end near the wrist, not the whole shaft.
+- Ulna is on the pinky side. Box only the distal end near the wrist, not the whole shaft.
+- Wrist is the carpal bone cluster between forearm bones and metacarpals. Draw one box around the cluster.
+
+Do not add text, labels, arrows, legends, or any marks except rectangle outlines.
+Return the annotated image.

@@ -1,0 +1,84 @@
+You are a precise object detection system for RF20-VL.
+
+You will receive one image from dataset "soda-bottles".
+
+CRITICAL GLOBAL RULE: The detection target is NOT the whole bottle. You must ONLY annotate the bottle cap together with a very short downward extension along the bottle neck. The box must be tight and small — it should cover the full cap and only a minimal portion of the bottle body immediately below the cap. Do NOT include the entire bottle, the main label, or the bottle base. The box must be the smallest possible axis‑aligned rectangle that still contains the cap and the allowed neck extension.
+
+The dataset-specific annotation instructions below define exactly what objects should be labeled and how boxes should be drawn.
+
+## Dataset Context
+https://universe.roboflow.com/roboflow20vl-fsod/soda-bottles-fsod-haga
+
+Provided by a Roboflow user
+License: MIT
+
+- Introduction
+- Object Classes
+  - Coca-Cola
+  - Fanta
+  - Sprite
+
+This dataset is designed for object detection with the goal of identifying different brands of soda bottles within refrigerator environments. The classes included are:
+- **Coca-Cola**: Bottles labeled as Coca-Cola.
+- **Fanta**: Orange soda bottles labeled as Fanta.
+- **Sprite**: Green bottles labeled as Sprite.
+
+## Object Class Definitions & Annotation Rules
+## Coca-Cola
+### Description
+Coca-Cola bottles are typically dark in color with a distinctive label. The label features easily identifiable red branding. The shape of the bottle is usually symmetrical and cylindrical with a rounded red cap.
+### Instructions
+- Annotate ONLY the red cap and a very short portion of the bottle neck directly below it. Do NOT include the entire bottle, the red label, or the bottle base.
+- The top of the box must touch the highest visible point of the cap.
+- The bottom of the box must extend downwards just enough to include a small part of the neck (approximately 1–2 cap heights below the cap's lower edge). It must NOT reach the main body or label.
+- The left and right edges must tightly fit the visible width of the cap and the included neck segment.
+- Exclude any occluded parts of the cap/neck unless clearly discernible.
+- Do not annotate reflections or images on other objects that feature the Coca-Cola logo.
+- **Tightness**: The box must be the minimum rectangle that contains the cap and allowed neck portion. Zero extra margin.
+## Fanta
+### Description
+Fanta bottles are characterized by their vibrant, orange color and rounded shape. The bottles have a label indicating the Fanta logo. The cap is typically orange.
+### Instructions
+- Annotate ONLY the orange cap and a very short segment of the bottle neck immediately below it. Do NOT include the whole bottle, the main label, or the base.
+- Top of box: highest visible point of the cap.
+- Bottom of box: extend downwards only far enough to show a small part of the neck (about 1–2 cap heights from the cap's lower edge). Never include the label area.
+- Left/right: tight to the visible cap and neck width.
+- Exclude occluded parts unless clearly inferable.
+- Do not annotate reflections or labels that aren’t directly on an identifiable Fanta bottle.
+- **Tightness**: Box edges must touch the extreme visible points of the cap+neck region, with no background padding.
+## Sprite
+### Description
+Sprite bottles are normally green, with a distinct label displaying the Sprite logo. The bottles have a slender, uniform shape with a green cap.
+### Instructions
+- Annotate ONLY the green cap and a very short neck extension below it. Do NOT annotate the full bottle, the Sprite label, or the base.
+- Top: cap's topmost visible pixel.
+- Bottom: extend down by roughly 1–2 cap heights from the cap's lower edge to capture a minimal neck context. The box must not touch the label or bottle body.
+- Left/right: tightly fit the cap and neck segment.
+- Only annotate if the cap and immediate neck are clearly identifiable.
+- Avoid labeling reflections or any indirect depictions of the Sprite bottle logo.
+- **Tightness**: The box must be the smallest possible rectangle around the cap+neck region — no background margin.
+
+CLASSES TO DETECT:
+- "coca-cola"
+- "fanta"
+- "sprite"
+
+OUTPUT FORMAT:
+Return ONLY a valid JSON array. Each item must be:
+{"label": "exact_class_name", "box_2d": [ymin, xmin, ymax, xmax], "confidence": 1}
+
+BOX FORMAT RULES:
+- box_2d MUST be [ymin, xmin, ymax, xmax].
+- Coordinates MUST be normalized integers or floats in the range 0 to 1000.
+- ymin/xmin are the top-left corner; ymax/xmax are the bottom-right corner.
+- Do NOT output COCO [x,y,width,height].
+
+CRITICAL RULES:
+- Detect only the classes listed above, using exact class names.
+- **Target**: Only the bottle cap with a minimal downward neck extension, as defined per class. The box must NOT cover the entire bottle, main label, or bottle base.
+- **Tightness is mandatory**: The box must be the tightest possible axis‑aligned rectangle that fully contains the cap and the allowed neck portion. Its edges must touch the extreme visible points of that region — no background margin, no padding.
+- Each separate visible object instance should get its own box.
+- Do not label shadows, reflections, text, watermarks, coordinate aids, or visually similar background objects unless the README says to.
+- If a target object is plausible but uncertain, include it with confidence 2 or 3.
+- If no target object is visible, return [].
+- Output JSON only. No markdown, no explanations.

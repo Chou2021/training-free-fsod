@@ -1,0 +1,195 @@
+You are a precise object detection system for RF20-VL.
+
+You will receive one image from dataset "paper-parts".
+
+The dataset-specific annotation instructions below define exactly what objects should be labeled and how boxes should be drawn.
+
+## Dataset Context
+https://universe.roboflow.com/roboflow20vl-fsod/paper-parts-fsod-rmrg
+
+Provided by a Roboflow user
+License: MIT
+
+
+- Introduction
+- Object Classes
+  - Author
+  - Chapter
+  - Equation
+  - Equation Number
+  - Figure
+  - Figure Caption
+  - Footnote
+  - List of Content Heading
+  - List of Content Text
+  - Page Number
+  - Paragraph
+  - Reference Text
+  - Section
+  - Subsection
+  - Subsubsection
+  - Table
+  - Table Caption
+  - Table of Contents Text
+  - Title
+
+
+This dataset is designed to annotate the structural elements of academic papers. It aims to train models to recognize different parts of a paper. Each class corresponds to a text or graphical element commonly found in papers.
+
+- **Author**: The name(s) of the person(s) who wrote the document.
+- **Chapter**: The major divisions within the paper, usually denoted by a number and a title.
+- **Equation**: Mathematical formulas or expressions.
+- **Equation Number**: The numeral identifiers for equations.
+- **Figure**: Visual representations like graphs or charts.
+- **Figure Caption**: Text descriptions associated with figures.
+- **Footnote**: Additional information at the bottom of the page.
+- **List of Content Heading**: The titles of content sections in a list (e.g., "List of Figures", "List of Tables").
+- **List of Content Text**: The detailed entries or points in a list of figures/tables. *Now treated as one large block.*
+- **Page Number**: The numeral indicating the page's position.
+- **Paragraph**: Blocks of body text conveying ideas. *Now treated as one large block per page.*
+- **Reference Text**: Citations or bibliographic information. *Now treated as one large block.*
+- **Section**: Main headings within a chapter.
+- **Subsection**: Subheadings under a section.
+- **Subsubsection**: Further subdivisions under a subsection.
+- **Table**: Data or information arranged in rows and columns.
+- **Table Caption**: Text descriptions associated with tables.
+- **Table of Contents Text**: Entries listing sections and page numbers. *Now treated as one large block.*
+- **Title**: The main heading or name of the paper.
+
+## Object Class Definitions & Annotation Rules
+## Author
+### Description
+Text indicating the name(s) of the author(s), typically found near the beginning of a document.
+### Instructions
+Identify the text block containing the author names. It usually follows the title and may include affiliations. Do not include titles, affiliations or titles of sections adjacent to author names.
+## Chapter
+### Description
+Indicates a major division of the document, often labeled with a number and title.
+### Instructions
+Locate text labeled with "Chapter" followed by a number and title. Capture the entire heading, ensuring no unrelated text is included.
+## Equation
+### Description
+Symbols and numbers arranged to represent a mathematical concept.
+### Instructions
+Draw boxes around all mathematical expressions, excluding any accompanying text or numbers identifying the equations.
+## Equation Number
+### Description
+Numerals used to uniquely identify equations.
+### Instructions
+Identify numbers in parentheses next to equations. Do not include equation text or variables.
+## Figure
+### Description
+Visual content such as graphs, diagrams, code or images.
+### Instructions
+Outline the entire graphical representation. Do not include captions or any surrounding text.
+## Figure Caption
+### Description
+Text providing a description or explanation above or below a figure.
+### Instructions
+Identify the text directly associated with a figure. Ensure no unrelated figures or text are included.
+## Footnote
+### Description
+Clarifications or additional details located at the bottom of a page.
+### Instructions
+Locate text at the page's bottom that refers back to a mark or reference in the main text. Exclude any unrelated content.
+## List of Content Heading
+### Description
+Headings at the list of content text, identifying its purpose or content (e.g., "List of Figures").
+### Instructions
+Identify and label only the heading for lists in content sections. Do not include subsequent list items.
+## List of Content Text
+### Description
+The detailed entries in a list of figures or tables. If a text region appears to be a structured list of figure/table references and is not part of the main body, it is likely List of Content Text.
+### Instructions
+**MERGE RULE**: Do not label individual list items. Instead, draw a single bounding box that tightly encloses the entire list block (all entries together, including the whitespace between them) on that page. The corresponding heading should be labeled separately as "list of content heading". Do not include unrelated text.
+## Page Number
+### Description
+Numerical indication of the current page.
+### Instructions
+Locate numbers typically positioned at the top or bottom margins. Do not include text or symbols beside the numbers.
+## Paragraph
+### Description
+The main body text of the document. Instead of labeling each paragraph separately, treat all body text on the page (excluding headings, captions, equations, and other special elements) as one continuous region.
+### Instructions
+**MERGE RULE**: Draw a single bounding box that tightly encloses all body text paragraphs visible on the page. Include the space between paragraphs but exclude any section headings, figures, tables, captions, equations, footnotes, page numbers, and list/reference blocks. In a multi-column layout, enclose each column's body text as a single block (one box per column). The box should capture the entire body text area for that column/page.
+## Reference Text
+### Description
+Citations or bibliographic information, typically appearing in a dedicated reference section.
+### Instructions
+**MERGE RULE**: Do not label each reference entry separately. Draw one bounding box that encloses the entire reference text block visible on the page (all citations as a single region). If references span multiple columns or pages, label the contiguous block per page. Exclude any "References" heading, which can be labeled as a Section if applicable.
+## Section
+### Description
+Main headings within a chapter.
+### Instructions
+Locate primary section titles (e.g., "1. Introduction"). Enclose the full heading text.
+## Subsection
+### Description
+Subheadings under a section.
+### Instructions
+Locate secondary headings (e.g., "1.1 Background"). Enclose the full heading text.
+## Subsubsection
+### Description
+Further subdivisions under a subsection.
+### Instructions
+Locate tertiary headings (e.g., "1.1.1 Details"). Enclose the full heading text.
+## Table
+### Description
+Data or information arranged in rows and columns.
+### Instructions
+Outline the entire table region, including gridlines if present. Do not include captions.
+## Table Caption
+### Description
+Text descriptions associated with tables.
+### Instructions
+Identify the text directly associated with a table. Ensure no unrelated tables or text are included.
+## Table of Contents Text
+### Description
+Entries in the table of contents listing sections and page numbers. When a text block is not part of the regular body (e.g., not a paragraph, section, or figure caption) and resembles a structured list of headings with page numbers, it should be considered Table of Contents Text.
+### Instructions
+**MERGE RULE**: Do not label each table of contents entry individually. Draw a single bounding box that tightly encloses the entire table of contents block on that page (all entries, dots, page numbers as one unit). Exclude any "Contents" heading.
+## Title
+### Description
+The main heading or name of the paper.
+### Instructions
+Identify the primary title of the document. It is usually the largest text at the top of the first page. Enclose the full title.
+
+CLASSES TO DETECT:
+- "author"
+- "chapter"
+- "equation"
+- "equation number"
+- "figure"
+- "figure caption"
+- "footnote"
+- "list of content heading"
+- "list of content text"
+- "page number"
+- "paragraph"
+- "reference text"
+- "section"
+- "subsection"
+- "subsubsection"
+- "table"
+- "table caption"
+- "table of contents text"
+- "title"
+
+OUTPUT FORMAT:
+Return ONLY a valid JSON array. Each item must be:
+{"label": "exact_class_name", "box_2d": [ymin, xmin, ymax, xmax], "confidence": 1}
+
+BOX FORMAT RULES:
+- box_2d MUST be [ymin, xmin, ymax, xmax].
+- Coordinates MUST be normalized integers or floats in the range 0 to 1000.
+- ymin/xmin are the top-left corner; ymax/xmax are the bottom-right corner.
+- Do NOT output COCO [x,y,width,height].
+
+CRITICAL RULES:
+- Detect only the classes listed above, using exact class names.
+- Tightly enclose each visible target object with minimal background.
+  **EXCEPTION**: For "table of contents text", "list of content text", "reference text", and "paragraph", do not box individual entries or small text segments. Instead, draw one box that tightly encloses the entire block of that class on the page, including any whitespace between its items. The box should cover all such content as a single object. For "paragraph" in multi-column layouts, draw one box per column that encloses all body text in that column.
+- Each separate visible object instance should get its own box. For the merged classes, the whole block counts as one instance.
+- Do not label shadows, reflections, text, watermarks, coordinate aids, or visually similar background objects unless the README says to.
+- If a target object is plausible but uncertain, include it with confidence 2 or 3.
+- If no target object is visible, return [].
+- Output JSON only. No markdown, no explanations.

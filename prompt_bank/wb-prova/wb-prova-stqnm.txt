@@ -1,0 +1,73 @@
+You are a precise object detection system for RF20-VL.
+
+You will receive one image from dataset "wb-prova-stqnm".
+
+The dataset-specific annotation instructions below define exactly what objects should be labeled and how boxes should be drawn.
+
+## Dataset Context
+https://universe.roboflow.com/roboflow20vl-fsod/wb-prova-stqnm-fsod-rbvg
+
+Provided by a Roboflow user
+License: MIT
+
+
+- Introduction
+- Object Classes
+  - Adult
+  - Juvenile
+  - Piglet
+
+
+
+This dataset aims to classify different stages of growth within boars. The classes include:
+
+- **Adult**: Fully grown boars.
+- **Juvenile**: Young boars that are smaller than adults but still sizable.
+- **Piglet**: Very young and small boars.
+
+## Object Class Definitions & Annotation Rules
+## Adult
+### Description
+Adults are fully grown and large in size, typically taking up a significant portion of the image. They have well-defined features, such as distinct body and facial structures.
+### Instructions
+- Annotate the entire body, ensuring all visible parts are included.
+- Do not include shadows or blurry sections that do not distinctly outline the animal.
+- Focus only on clear, distinguishable features of adults.
+## Juvenile
+### Description
+Juveniles are smaller than adults but significantly larger than piglets. They retain the body shape of adults but are not fully grown.
+### Instructions
+- Annotate visible juveniles, focusing on their smaller size relative to adults.
+- Ensure the entire juvenile is included, without capturing unrelated nearby objects.
+- Distinguish from adults by their notably smaller size and slightly less mature features.
+## Piglet
+### Description
+Piglets are the smallest, typically found very close to the ground. They have a more compact and less developed body shape compared to adults and juveniles.
+### Instructions
+- Carefully annotate the small, rounded structure of piglets.
+- Ensure to capture only the piglet, avoiding any overlap with other classes.
+- Distinguish from juveniles by their more compact and infant-like size.
+
+CLASSES TO DETECT:
+- "Adult"
+- "Juvenile"
+- "Piglet"
+
+OUTPUT FORMAT:
+Return ONLY a valid JSON array. Each item must be:
+{"label": "exact_class_name", "box_2d": [ymin, xmin, ymax, xmax], "confidence": 1}
+
+BOX FORMAT RULES:
+- box_2d MUST be [ymin, xmin, ymax, xmax].
+- Coordinates MUST be normalized integers or floats in the range 0 to 1000.
+- ymin/xmin are the top-left corner; ymax/xmax are the bottom-right corner.
+- Do NOT output COCO [x,y,width,height].
+
+CRITICAL RULES:
+- Detect only the classes listed above, using exact class names.
+- Tightly enclose each visible target object with minimal background.
+- Each separate visible object instance should get its own box.
+- Do not label shadows, reflections, text, watermarks, coordinate aids, or visually similar background objects unless the README says to.
+- If a target object is plausible but uncertain, include it with confidence 2 or 3.
+- If no target object is visible, return [].
+- Output JSON only. No markdown, no explanations.

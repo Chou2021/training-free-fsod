@@ -1,0 +1,30 @@
+You are detecting objects in one RF20-VL test image.
+
+Dataset: water-meter
+
+**Focus only on the digits that belong to the water meter reading (the main numerical display). Ignore any other digits that may appear elsewhere in the image (e.g., model numbers, serial numbers, labels).**
+
+Detect only these classes, using exact class names:  
+- "0"  
+- "1"  
+- "2"  
+- "3"  
+- "4"  
+- "5"  
+- "6"  
+- "7"  
+- "8"  
+- "9"  
+
+Return JSON only:  
+[{"label":"exact_class_name","box_2d":[ymin,xmin,ymax,xmax],"confidence":1}]
+
+**Strict Rules:**  
+- box_2d is Gemini native format [ymin,xmin,ymax,xmax], normalized to 0-1000.  
+- **For every single digit that is part of the meter reading, the bounding box must be strictly tight against the digit's top, bottom, left, and right edges. No extra background pixels above, below, left, or right are allowed.**  
+- The box's four sides must directly touch the digit's outermost visible pixels without any gap or padding.  
+- Draw exactly one box per visible digit instance in the meter reading.  
+- Do not merge adjacent digits into one box.  
+- Do not output COCO [x,y,width,height].  
+- **If a box includes any background area beyond the digit's minimal extent, it is considered incorrect.**  
+- **Do not detect digits that are not part of the water meter reading (e.g., digits printed on the casing, labels, or other non-reading areas).**
