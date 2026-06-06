@@ -12,7 +12,8 @@ The repository is intentionally small. It is meant to let organizers reproduce r
 ├── scripts/
 │   ├── run_gemini_detection.py          # Main VLM detection runner
 │   ├── merge_category_predictions.py    # Merge single-class outputs into a base PKL
-│   └── weighted_box_fusion.py           # Fuse loose/tight boxes, used for soda-bottles
+│   ├── weighted_box_fusion.py           # Fuse loose/tight boxes, used for soda-bottles
+│   └── rescore_with_gpt_confidence.py   # Optional GPT confidence rescoring
 ├── generative_bbox_package/             # Colored-box generation and extraction
 ├── configs/dataset_strategies.json      # Machine-readable strategy summary
 ├── streamlit_review_app.py              # Optional lightweight visual review UI
@@ -206,6 +207,44 @@ python scripts/weighted_box_fusion.py \
   --weight 0.5 \
   --keep-unmatched first
 ```
+
+## GPT Confidence Rescoring
+
+The technical report also describes a confidence calibration step. We used a GPT vision model to judge each candidate box and replace the original score with a value in `[0, 1]`.
+
+Set an API key and model:
+
+```bash
+export GPT_API_KEY="YOUR_KEY"
+export GPT_MODEL="gpt-5.4"
+```
+
+Then rescore an existing PKL:
+
+```bash
+python scripts/rescore_with_gpt_confidence.py \
+  --coco rf20-vl-data/aerial-airport/test/_annotations.coco.json \
+  --image-dir rf20-vl-data/aerial-airport/test \
+  --input-pkl outputs/aerial-airport-first10.pkl \
+  --output-pkl outputs/aerial-airport-first10-gpt-scores.pkl \
+  --dataset aerial-airport \
+  --max-boxes 20 \
+  --raw-dir raw_outputs/aerial-airport-gpt-scores
+```
+
+For datasets where one-shot visual reference helps, add a green-box train exemplar:
+
+```bash
+python scripts/rescore_with_gpt_confidence.py \
+  --coco rf20-vl-data/recode-waste/test/_annotations.coco.json \
+  --image-dir rf20-vl-data/recode-waste/test \
+  --input-pkl outputs/recode-merged.pkl \
+  --output-pkl outputs/recode-merged-gpt-scores.pkl \
+  --dataset recode-waste \
+  --use-train-exemplar
+```
+
+The script keeps `image_id`, `category_id`, and `bbox` unchanged; only `score` is updated. It can resume from an existing output PKL.
 
 ## X-ray-id and DentalAI
 
