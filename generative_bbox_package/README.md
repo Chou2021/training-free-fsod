@@ -1,123 +1,125 @@
-# Generative Colored-box Detection
+# X-ray colored-box extraction
 
-This package contains the command-line workflow used for `x-ray-id` and adapted for `dentalai`.
+This folder contains the minimal two-step pipeline used for hand X-ray boxes in `x-ray-id`:
 
-The workflow is:
+1. Use a Gemini image model to draw colored box outlines on one X-ray image.
+2. Use OpenCV to extract those colored outlines as COCO-style boxes.
 
-1. Ask a Gemini image generation model to draw colored rectangle outlines on the input image.
-2. Use OpenCV color thresholding to extract those rectangles.
-3. Convert rectangles to RF20-style PKL predictions.
+The scripts do not contain an API key. Set `GEMINI_API_KEY` in the shell.
 
-No Streamlit code or API keys are required.
+## Files
 
-## Setup
+```text
+generative_bbox_package/
+├── prompts/
+│   └── xray_colored_box_prompt.txt
+├── call_model.py
+├── extract_boxes.py
+├── README.md
+└── README_zh.md
+```
 
-From this package directory:
+## Install
 
 ```bash
 python -m pip install -r requirements.txt
-export GEMINI_API_KEY="YOUR_KEY"
 ```
 
-Optional endpoint/model overrides:
+## Environment
 
 ```bash
-export GEMINI_API_BASE="https://generativelanguage.googleapis.com"
-export GEMINI_IMAGE_MODEL="gemini-3.1-flash-image-preview"
+export GEMINI_API_KEY='your_key_here'
+export GEMINI_API_BASE='https://generativelanguage.googleapis.com'
+export GEMINI_IMAGE_MODEL='gemini-3.1-flash-image-preview'
 ```
 
-If your API provider exposes a Gemini-compatible image model under another name, pass `--model` explicitly.
+`GEMINI_API_BASE` and `GEMINI_IMAGE_MODEL` match the defaults used by `call_model.py`, so only `GEMINI_API_KEY` is strictly required when using the official endpoint.
 
-## X-ray-id Example
-
-Generate colored overlays for the first 10 images:
+## 1. Generate the annotated image
 
 ```bash
-python run_generate.py \
-  --coco ../rf20-vl-data/x-ray-id/test/_annotations.coco.json \
-  --image-dir ../rf20-vl-data/x-ray-id/test \
-  --prompt prompts/xray_overlay_prompt.txt \
-  --out-dir outputs/xray-id-first10 \
-  --first-n 10 \
-  --workers 4 \
-  --temperature 0
+python call_model.py \
+  --image /path/to/xray.jpg \
+  --prompt prompts/xray_colored_box_prompt.txt \
+  --out-image outputs/xray_annotated.png \
+  --raw-json outputs/raw_response.json
 ```
 
-Extract all six classes:
+The output should be the original X-ray with colored rectangle outlines drawn on top.
+
+## 2. Extract boxes
 
 ```bash
-python run_extract.py \
-  --coco ../rf20-vl-data/x-ray-id/test/_annotations.coco.json \
-  --image-dir ../rf20-vl-data/x-ray-id/test \
-  --run-dir outputs/xray-id-first10 \
-  --out-pkl outputs/xray-id-first10/pkls/xray-id.pkl \
-  --preset all6 \
-  --first-n 10
+python extract_boxes.py \
+  --annotated-image outputs/xray_annotated.png \
+  --original-image /path/to/xray.jpg \
+  --image-id 0 \
+  --out-json outputs/pred.json \
+  --out-pkl outputs/pred.pkl \
+  --debug-image outputs/debug_extract.png
 ```
 
-For wrist/forearm boxes, `--extraction-mode rectilinear` can be more stable:
+`--original-image` is used for the original width and height. If the generated image is resized by the model, the extracted boxes are scaled back to the original coordinate system.
 
-```bash
-python run_extract.py \
-  --coco ../rf20-vl-data/x-ray-id/test/_annotations.coco.json \
-  --image-dir ../rf20-vl-data/x-ray-id/test \
-  --run-dir outputs/xray-id-first10 \
-  --out-pkl outputs/xray-id-first10/pkls/xray-wrist-forearm.pkl \
-  --preset wrist_forearm \
-  --extraction-mode rectilinear \
-  --first-n 10
-```
-
-## DentalAI Example
-
-```bash
-python run_generate.py \
-  --coco ../rf20-vl-data/dentalai/test/_annotations.coco.json \
-  --image-dir ../rf20-vl-data/dentalai/test \
-  --prompt prompts/dental_overlay_prompt.txt \
-  --out-dir outputs/dentalai-first10 \
-  --first-n 10 \
-  --workers 4 \
-  --temperature 0
-
-python run_extract.py \
-  --coco ../rf20-vl-data/dentalai/test/_annotations.coco.json \
-  --image-dir ../rf20-vl-data/dentalai/test \
-  --run-dir outputs/dentalai-first10 \
-  --out-pkl outputs/dentalai-first10/pkls/dentalai.pkl \
-  --preset dentalai \
-  --first-n 10
-```
-
-## Merge Multiple PKLs
-
-```bash
-python merge_pkls.py \
-  --inputs outputs/xray-joints.pkl outputs/xray-wrist-forearm.pkl \
-  --out-pkl outputs/xray-merged.pkl \
-  --dedupe-iou 0.8
-```
-
-## Color Presets
+Boxes are saved as COCO `xywh`:
 
 ```text
-all6: DIP, PIP, MCP, Radius, Ulna, Wrist
-joints: DIP, PIP, MCP
-wrist_forearm: Radius, Ulna, Wrist
-forearm_bones: Radius, Ulna
-dentalai: Cavity, Fillings, Impacted Tooth, Implant
+[x, y, width, height]
 ```
 
-The extractor also accepts a custom JSON color map:
+The pickle contains a list of image records:
 
-```bash
-python run_extract.py ... --color-map-file my_colors.json
+```python
+[
+  {
+    "image_id": 0,
+    "instances": [
+      {
+        "image_id": 0,
+        "category_id": 0,
+        "label": "DIP",
+        "bbox": [x, y, width, height],
+        "score": 1.0
+      }
+    ]
+  }
+]
 ```
 
-`my_colors.json` should look like:
+That example is a one-image pkl. For a full dataset, run this script for each image and combine all image records into one list:
 
-```json
-{"red": "Class A", "blue": "Class B"}
+```python
+[
+  {"image_id": 0, "instances": [...]},
+  {"image_id": 1, "instances": [...]},
+  {"image_id": 2, "instances": [...]},
+]
 ```
 
-Supported color names are `red`, `blue`, `yellow`, `green`, `orange`, and `purple`.
+Example from one real API test:
+
+```text
+image_id: 0
+generated image size: 944x1116
+original image size: 433x512
+extracted boxes: 17
+class counts: DIP 4, PIP 5, MCP 5, Radius 1, Ulna 1, Wrist 1
+```
+
+## Labels
+
+| label | category_id | color |
+|---|---:|---|
+| DIP | 0 | red |
+| MCP | 1 | yellow |
+| PIP | 2 | blue |
+| Radius | 3 | green |
+| Ulna | 4 | orange |
+| Wrist | 5 | purple |
+
+## Notes
+
+- This is single-image code. For a dataset, call the two scripts in a loop.
+- Scores are fixed at `1.0`.
+- The extractor expects the generated image to use the colors in `prompts/xray_colored_box_prompt.txt`.
+- Check category IDs before submission. Some COCO exports include a dummy class that shifts labels by one.

@@ -1,5 +1,4 @@
-opencv-python
 pillow
+opencv-python
 numpy
 requests
-tqdm

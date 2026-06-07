@@ -11,7 +11,6 @@ These are the prompts used by the training-free RF20-VL submission.
     - all-elements
     - lacrosse-object-detection
     - recode-waste
-    - dentalai
     - x-ray-id
 - No training, no ICL, no ruler, no refine.
 - Output format is Gemini native `box_2d=[ymin,xmin,ymax,xmax]` normalized to `[0,1000]`.

@@ -98,8 +98,8 @@ soda-bottles:
 all-elements:
   has a multi-class prompt plus per-class prompts in prompt_bank/all-elements/.
 
-x-ray-id, dentalai:
-  use the generative colored-box workflow in generative_bbox_package/.
+x-ray-id:
+  use the minimal colored-box workflow in generative_bbox_package/.
 ```
 
 See `configs/dataset_strategies.json` for a machine-readable index of the prompts used by each strategy.
@@ -246,9 +246,9 @@ python scripts/rescore_with_gpt_confidence.py \
 
 The script keeps `image_id`, `category_id`, and `bbox` unchanged; only `score` is updated. It can resume from an existing output PKL.
 
-## X-ray-id and DentalAI
+## X-ray-id Colored-box Workflow
 
-For these datasets we used a generative colored-box workflow: the image model draws colored rectangle outlines on the image, and OpenCV extracts those colored boxes into COCO coordinates.
+For `x-ray-id`, we used a minimal colored-box workflow: the image model draws colored rectangle outlines on one hand X-ray image, and OpenCV extracts those colored boxes into COCO coordinates.
 
 See `generative_bbox_package/README.md` for commands.
 

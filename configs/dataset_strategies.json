@@ -64,13 +64,8 @@
   "generative_colored_box_extraction": {
     "x-ray-id": {
       "package": "generative_bbox_package",
-      "prompt": "generative_bbox_package/prompts/xray_overlay_prompt.txt",
+      "prompt": "generative_bbox_package/prompts/xray_colored_box_prompt.txt",
       "preset": "all6"
-    },
-    "dentalai": {
-      "package": "generative_bbox_package",
-      "prompt": "generative_bbox_package/prompts/dental_overlay_prompt.txt",
-      "preset": "dentalai"
     }
   }
 }
